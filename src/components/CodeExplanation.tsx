@@ -2,14 +2,6 @@ import React from 'react';
 import { Lightbulb, Code, AlertTriangle, CheckCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-/**
- * =====================================
- * CODE EXPLANATION - BLOCCHI EDUCATIVI
- * =====================================
- * 
- * Componenti per mostrare spiegazioni e codice in modo educativo.
- */
-
 interface ExplanationCardProps {
   title: string;
   children: React.ReactNode;
@@ -48,15 +40,17 @@ export const ExplanationCard: React.FC<ExplanationCardProps> = ({
 
   return (
     <div className={cn(
-      'rounded-xl border-2 p-4 space-y-3',
+      'rounded-xl border-2 p-5 space-y-3 glass backdrop-blur-sm transition-all hover:border-opacity-50',
       styles[type],
       className
     )}>
       <div className="flex items-center gap-2">
-        <Icon className={cn('w-5 h-5', iconColors[type])} />
+        <div className={cn('p-2 rounded-lg', styles[type])}>
+          <Icon className={cn('w-5 h-5', iconColors[type])} />
+        </div>
         <h4 className="font-semibold text-foreground">{title}</h4>
       </div>
-      <div className="text-sm text-foreground/80 leading-relaxed">
+      <div className="text-sm text-foreground/80 leading-relaxed pl-11">
         {children}
       </div>
     </div>
@@ -75,10 +69,15 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
   title,
 }) => {
   return (
-    <div className="rounded-xl border-2 border-code-border overflow-hidden">
+    <div className="rounded-xl border-2 border-border/50 overflow-hidden glass">
       {title && (
-        <div className="bg-secondary px-4 py-2 border-b border-code-border">
-          <span className="text-sm font-mono text-muted-foreground">{title}</span>
+        <div className="bg-secondary/50 px-4 py-2 border-b border-border/50 flex items-center gap-2">
+          <div className="flex gap-1.5">
+            <div className="w-3 h-3 rounded-full bg-destructive/50" />
+            <div className="w-3 h-3 rounded-full bg-warning/50" />
+            <div className="w-3 h-3 rounded-full bg-accent/50" />
+          </div>
+          <span className="text-sm font-mono text-muted-foreground ml-2">{title}</span>
         </div>
       )}
       <pre className="bg-code-bg p-4 overflow-x-auto">
@@ -105,16 +104,20 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
         <div
           key={index}
           className={cn(
-            'flex items-center gap-3 p-2 rounded-lg transition-all',
-            index === currentStep && 'bg-primary/10',
+            'flex items-center gap-3 p-3 rounded-xl transition-all duration-300',
+            index === currentStep && 'bg-primary/10 border border-primary/30 glow-primary',
             index < currentStep && 'opacity-50'
           )}
         >
           <div className={cn(
-            'w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold',
-            index <= currentStep ? 'bg-primary text-primary-foreground' : 'bg-secondary text-secondary-foreground'
+            'w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all',
+            index === currentStep 
+              ? 'bg-gradient-primary text-primary-foreground animate-pulse-glow' 
+              : index < currentStep 
+                ? 'bg-accent/20 text-accent' 
+                : 'bg-secondary text-secondary-foreground'
           )}>
-            {index + 1}
+            {index < currentStep ? '✓' : index + 1}
           </div>
           <span className={cn(
             'text-sm',
