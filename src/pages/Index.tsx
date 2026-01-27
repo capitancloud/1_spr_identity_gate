@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import AuthStatus from '@/components/AuthStatus';
 import { ExplanationCard, CodeBlock } from '@/components/CodeExplanation';
+import AuthFlowDiagram from '@/components/AuthFlowDiagram';
 import heroImage from '@/assets/hero-security.jpg';
 import {
   Shield,
@@ -18,6 +19,7 @@ import {
   Zap,
   Code,
   Terminal,
+  GitBranch,
 } from 'lucide-react';
 
 const Index: React.FC = () => {
@@ -189,13 +191,39 @@ const Index: React.FC = () => {
         </div>
       </section>
 
+      {/* Auth Flow Diagram Section */}
+      <section className="py-20 relative overflow-hidden">
+        <div className="absolute inset-0 grid-pattern opacity-10" />
+        <div className="absolute top-1/2 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 right-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
+        
+        <div className="container relative">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-accent/30 text-accent text-sm font-medium mb-4">
+              <GitBranch className="w-4 h-4" />
+              Diagramma Interattivo
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Visualizza il Flusso di
+              <span className="text-gradient-accent"> Autenticazione</span>
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Osserva passo dopo passo cosa succede quando un utente si registra o effettua il login.
+              L'animazione mostra il flusso dei dati tra client, server e database.
+            </p>
+          </div>
+          
+          <AuthFlowDiagram />
+        </div>
+      </section>
+
       {/* How it works */}
       <section className="py-20 relative">
         <div className="absolute inset-0 bg-gradient-hero opacity-50" />
         <div className="container relative">
           <div className="max-w-3xl mx-auto space-y-8">
             <h2 className="text-3xl font-bold text-center text-foreground">
-              Come Funziona?
+              Approfondimenti Tecnici
             </h2>
 
             <ExplanationCard title="Flusso di Autenticazione" type="info">
