@@ -2,16 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
-import { Shield, LogOut, LogIn, UserPlus, Home, LayoutDashboard } from 'lucide-react';
-
-/**
- * =====================================
- * HEADER - NAVIGAZIONE PRINCIPALE
- * =====================================
- * 
- * L'header mostra contenuti diversi in base allo stato auth.
- * Questo è un esempio pratico di "conditional rendering".
- */
+import { Shield, LogOut, LogIn, UserPlus, Home, LayoutDashboard, Sparkles } from 'lucide-react';
 
 const Header: React.FC = () => {
   const { isAuthenticated, user, logout } = useAuth();
@@ -23,20 +14,21 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b border-border/50 glass">
       <div className="container flex h-16 items-center justify-between">
-        {/* Logo e nome */}
-        <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-          <div className="p-2 rounded-lg auth-gradient">
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-all group">
+          <div className="relative p-2 rounded-xl bg-gradient-primary glow-primary">
             <Shield className="w-5 h-5 text-primary-foreground" />
+            <Sparkles className="w-3 h-3 text-accent absolute -top-1 -right-1 animate-pulse" />
           </div>
-          <span className="font-bold text-lg text-foreground">IdentityGate</span>
+          <span className="font-bold text-xl text-gradient">IdentityGate</span>
         </Link>
 
-        {/* Navigazione */}
+        {/* Navigation */}
         <nav className="flex items-center gap-2">
           <Link to="/">
-            <Button variant="ghost" size="sm" className="gap-2">
+            <Button variant="ghost" size="sm" className="gap-2 hover:bg-primary/10 hover:text-primary transition-all">
               <Home className="w-4 h-4" />
               <span className="hidden sm:inline">Home</span>
             </Button>
@@ -44,24 +36,23 @@ const Header: React.FC = () => {
 
           {isAuthenticated ? (
             <>
-              {/* Link alla dashboard (solo se autenticato) */}
               <Link to="/dashboard">
-                <Button variant="ghost" size="sm" className="gap-2">
+                <Button variant="ghost" size="sm" className="gap-2 hover:bg-primary/10 hover:text-primary transition-all">
                   <LayoutDashboard className="w-4 h-4" />
                   <span className="hidden sm:inline">Dashboard</span>
                 </Button>
               </Link>
 
-              {/* Info utente e logout */}
-              <div className="flex items-center gap-3 ml-2 pl-4 border-l border-border">
+              <div className="flex items-center gap-3 ml-2 pl-4 border-l border-border/50">
                 <span className="text-sm text-muted-foreground hidden sm:inline">
-                  Ciao, <span className="font-medium text-foreground">{user?.username}</span>
+                  <span className="text-accent">●</span>{' '}
+                  <span className="font-medium text-foreground">{user?.username}</span>
                 </span>
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={handleLogout}
-                  className="gap-2"
+                  className="gap-2 border-destructive/50 text-destructive hover:bg-destructive/10 hover:border-destructive"
                 >
                   <LogOut className="w-4 h-4" />
                   <span className="hidden sm:inline">Logout</span>
@@ -70,15 +61,14 @@ const Header: React.FC = () => {
             </>
           ) : (
             <>
-              {/* Link login/registrazione (solo se non autenticato) */}
               <Link to="/login">
-                <Button variant="ghost" size="sm" className="gap-2">
+                <Button variant="ghost" size="sm" className="gap-2 hover:bg-primary/10 hover:text-primary transition-all">
                   <LogIn className="w-4 h-4" />
                   <span className="hidden sm:inline">Accedi</span>
                 </Button>
               </Link>
               <Link to="/register">
-                <Button size="sm" className="gap-2">
+                <Button size="sm" className="gap-2 bg-gradient-primary hover:opacity-90 transition-all glow-primary">
                   <UserPlus className="w-4 h-4" />
                   <span className="hidden sm:inline">Registrati</span>
                 </Button>

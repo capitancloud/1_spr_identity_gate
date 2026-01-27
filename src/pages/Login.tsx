@@ -6,16 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { ExplanationCard, StepIndicator } from '@/components/CodeExplanation';
-import { LogIn, Mail, Lock, AlertCircle, Loader2, ArrowLeft } from 'lucide-react';
-
-/**
- * =====================================
- * LOGIN PAGE
- * =====================================
- * 
- * Questa pagina gestisce il processo di login.
- * Include spiegazioni educative sul flusso di autenticazione.
- */
+import { LogIn, Mail, Lock, AlertCircle, Loader2, ArrowLeft, Shield, Sparkles } from 'lucide-react';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -28,7 +19,6 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Dove reindirizzare dopo il login
   const from = (location.state as { from?: string })?.from || '/dashboard';
 
   const loginSteps = [
@@ -44,7 +34,6 @@ const Login: React.FC = () => {
     setIsLoading(true);
     setCurrentStep(1);
 
-    // Simula il flusso passo-passo per scopi educativi
     await new Promise(r => setTimeout(r, 400));
     setCurrentStep(2);
 
@@ -64,27 +53,39 @@ const Login: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-background flex">
-      {/* Colonna sinistra: Form */}
-      <div className="flex-1 flex items-center justify-center p-8">
+      {/* Background effects */}
+      <div className="absolute inset-0 grid-pattern opacity-20" />
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
+
+      {/* Left: Form */}
+      <div className="flex-1 flex items-center justify-center p-8 relative z-10">
         <div className="w-full max-w-md space-y-6 animate-fade-in">
           <div className="space-y-2">
             <Link
               to="/"
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               Torna alla home
             </Link>
-            <h1 className="text-3xl font-bold text-foreground">Accedi</h1>
-            <p className="text-muted-foreground">
-              Inserisci le tue credenziali per accedere
-            </p>
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-xl bg-gradient-primary">
+                <Shield className="w-6 h-6 text-primary-foreground" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold text-foreground">Accedi</h1>
+                <p className="text-muted-foreground">
+                  Inserisci le tue credenziali
+                </p>
+              </div>
+            </div>
           </div>
 
-          <Card className="p-6">
+          <Card className="p-6 glass border-border/50">
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email" className="text-foreground">Email</Label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
@@ -93,7 +94,7 @@ const Login: React.FC = () => {
                     placeholder="mario@esempio.it"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10"
+                    className="pl-10 bg-secondary/50 border-border/50 focus:border-primary"
                     disabled={isLoading}
                     required
                   />
@@ -101,7 +102,7 @@ const Login: React.FC = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password" className="text-foreground">Password</Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
@@ -110,7 +111,7 @@ const Login: React.FC = () => {
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10"
+                    className="pl-10 bg-secondary/50 border-border/50 focus:border-primary"
                     disabled={isLoading}
                     required
                   />
@@ -118,7 +119,7 @@ const Login: React.FC = () => {
               </div>
 
               {error && (
-                <div className="flex items-center gap-2 p-3 rounded-lg bg-destructive/10 text-destructive text-sm">
+                <div className="flex items-center gap-2 p-3 rounded-lg bg-destructive/10 border border-destructive/30 text-destructive text-sm animate-scale-in">
                   <AlertCircle className="w-4 h-4 flex-shrink-0" />
                   {error}
                 </div>
@@ -126,7 +127,7 @@ const Login: React.FC = () => {
 
               <Button
                 type="submit"
-                className="w-full gap-2"
+                className="w-full gap-2 bg-gradient-primary hover:opacity-90 glow-primary transition-all"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -138,6 +139,7 @@ const Login: React.FC = () => {
                   <>
                     <LogIn className="w-4 h-4" />
                     Accedi
+                    <Sparkles className="w-3 h-3" />
                   </>
                 )}
               </Button>
@@ -153,10 +155,11 @@ const Login: React.FC = () => {
         </div>
       </div>
 
-      {/* Colonna destra: Spiegazioni */}
-      <div className="hidden lg:flex flex-1 bg-secondary/30 items-center justify-center p-8">
+      {/* Right: Explanations */}
+      <div className="hidden lg:flex flex-1 items-center justify-center p-8 relative z-10">
         <div className="max-w-md space-y-6 animate-slide-in">
-          <h2 className="text-xl font-bold text-foreground">
+          <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-primary" />
             Flusso di Login
           </h2>
           
@@ -167,15 +170,14 @@ const Login: React.FC = () => {
               <li>Le credenziali vengono inviate al server</li>
               <li>La password viene confrontata con l'hash salvato</li>
               <li>Se corretta, viene generato un token di sessione</li>
-              <li>Il token viene salvato nel browser (localStorage/cookie)</li>
+              <li>Il token viene salvato nel browser</li>
             </ol>
           </ExplanationCard>
 
           <ExplanationCard title="Sicurezza" type="warning">
             <p className="text-sm">
               Il messaggio di errore è generico ("Credenziali non valide") per non
-              rivelare se un'email esiste nel sistema. Questo previene attacchi
-              di enumerazione degli utenti.
+              rivelare se un'email esiste nel sistema.
             </p>
           </ExplanationCard>
         </div>

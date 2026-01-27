@@ -6,16 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { ExplanationCard, CodeBlock } from '@/components/CodeExplanation';
-import { UserPlus, Mail, Lock, User, AlertCircle, Loader2, ArrowLeft, CheckCircle } from 'lucide-react';
-
-/**
- * =====================================
- * REGISTER PAGE
- * =====================================
- * 
- * Questa pagina gestisce la registrazione di nuovi utenti.
- * Mostra il processo di hashing delle password.
- */
+import { UserPlus, Mail, Lock, User, AlertCircle, Loader2, ArrowLeft, CheckCircle, Shield, Sparkles, Zap } from 'lucide-react';
 
 const Register: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -33,7 +24,6 @@ const Register: React.FC = () => {
     e.preventDefault();
     setError('');
 
-    // Validazione client-side
     if (password !== confirmPassword) {
       setError('Le password non corrispondono');
       return;
@@ -50,10 +40,7 @@ const Register: React.FC = () => {
 
     if (result.success) {
       setIsSuccess(true);
-      // Dopo 2 secondi, redirect al login
-      setTimeout(() => {
-        navigate('/login');
-      }, 2000);
+      setTimeout(() => navigate('/login'), 2000);
     } else {
       setError(result.error || 'Errore durante la registrazione');
     }
@@ -61,7 +48,6 @@ const Register: React.FC = () => {
     setIsLoading(false);
   };
 
-  // Indicatori di forza password (educativi)
   const getPasswordStrength = () => {
     if (password.length === 0) return { level: 0, text: '', color: '' };
     if (password.length < 6) return { level: 1, text: 'Debole', color: 'bg-destructive' };
@@ -73,9 +59,10 @@ const Register: React.FC = () => {
 
   if (isSuccess) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-8">
-        <Card className="p-8 max-w-md text-center space-y-4 animate-fade-in">
-          <div className="p-4 rounded-full bg-accent/10 w-fit mx-auto">
+      <div className="min-h-screen bg-background flex items-center justify-center p-8 relative">
+        <div className="absolute inset-0 grid-pattern opacity-20" />
+        <Card className="p-8 max-w-md text-center space-y-4 glass border-accent/30 animate-bounce-in relative z-10">
+          <div className="p-4 rounded-full bg-accent/10 w-fit mx-auto animate-pulse-glow">
             <CheckCircle className="w-12 h-12 text-accent" />
           </div>
           <h2 className="text-2xl font-bold text-foreground">
@@ -86,7 +73,8 @@ const Register: React.FC = () => {
           </p>
           <div className="pt-4">
             <Link to="/login">
-              <Button className="gap-2">
+              <Button className="gap-2 bg-gradient-primary">
+                <Zap className="w-4 h-4" />
                 Vai al Login
               </Button>
             </Link>
@@ -98,27 +86,39 @@ const Register: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-background flex">
-      {/* Colonna sinistra: Form */}
-      <div className="flex-1 flex items-center justify-center p-8">
+      {/* Background effects */}
+      <div className="absolute inset-0 grid-pattern opacity-20" />
+      <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-1/3 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
+
+      {/* Left: Form */}
+      <div className="flex-1 flex items-center justify-center p-8 relative z-10">
         <div className="w-full max-w-md space-y-6 animate-fade-in">
           <div className="space-y-2">
             <Link
               to="/"
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               Torna alla home
             </Link>
-            <h1 className="text-3xl font-bold text-foreground">Registrati</h1>
-            <p className="text-muted-foreground">
-              Crea un nuovo account per accedere
-            </p>
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-xl bg-gradient-accent">
+                <Shield className="w-6 h-6 text-accent-foreground" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold text-foreground">Registrati</h1>
+                <p className="text-muted-foreground">
+                  Crea un nuovo account
+                </p>
+              </div>
+            </div>
           </div>
 
-          <Card className="p-6">
+          <Card className="p-6 glass border-border/50">
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="username">Username</Label>
+                <Label htmlFor="username" className="text-foreground">Username</Label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
@@ -127,7 +127,7 @@ const Register: React.FC = () => {
                     placeholder="mario_rossi"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    className="pl-10"
+                    className="pl-10 bg-secondary/50 border-border/50 focus:border-primary"
                     disabled={isLoading}
                     required
                   />
@@ -135,7 +135,7 @@ const Register: React.FC = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email" className="text-foreground">Email</Label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
@@ -144,7 +144,7 @@ const Register: React.FC = () => {
                     placeholder="mario@esempio.it"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10"
+                    className="pl-10 bg-secondary/50 border-border/50 focus:border-primary"
                     disabled={isLoading}
                     required
                   />
@@ -152,7 +152,7 @@ const Register: React.FC = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password" className="text-foreground">Password</Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
@@ -161,33 +161,33 @@ const Register: React.FC = () => {
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10"
+                    className="pl-10 bg-secondary/50 border-border/50 focus:border-primary"
                     disabled={isLoading}
                     required
                   />
                 </div>
-                {/* Indicatore forza password */}
+                {/* Password strength indicator */}
                 {password.length > 0 && (
-                  <div className="space-y-1">
+                  <div className="space-y-1 animate-scale-in">
                     <div className="flex gap-1">
                       {[1, 2, 3].map((level) => (
                         <div
                           key={level}
-                          className={`h-1 flex-1 rounded-full transition-colors ${
+                          className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${
                             level <= strength.level ? strength.color : 'bg-secondary'
                           }`}
                         />
                       ))}
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      Forza: {strength.text}
+                      Forza: <span className={strength.level === 3 ? 'text-accent' : strength.level === 2 ? 'text-warning' : 'text-destructive'}>{strength.text}</span>
                     </p>
                   </div>
                 )}
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Conferma Password</Label>
+                <Label htmlFor="confirmPassword" className="text-foreground">Conferma Password</Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
@@ -196,7 +196,7 @@ const Register: React.FC = () => {
                     placeholder="••••••••"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="pl-10"
+                    className="pl-10 bg-secondary/50 border-border/50 focus:border-primary"
                     disabled={isLoading}
                     required
                   />
@@ -204,7 +204,7 @@ const Register: React.FC = () => {
               </div>
 
               {error && (
-                <div className="flex items-center gap-2 p-3 rounded-lg bg-destructive/10 text-destructive text-sm">
+                <div className="flex items-center gap-2 p-3 rounded-lg bg-destructive/10 border border-destructive/30 text-destructive text-sm animate-scale-in">
                   <AlertCircle className="w-4 h-4 flex-shrink-0" />
                   {error}
                 </div>
@@ -212,7 +212,7 @@ const Register: React.FC = () => {
 
               <Button
                 type="submit"
-                className="w-full gap-2"
+                className="w-full gap-2 bg-gradient-accent hover:opacity-90 glow-accent transition-all"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -224,6 +224,7 @@ const Register: React.FC = () => {
                   <>
                     <UserPlus className="w-4 h-4" />
                     Crea Account
+                    <Sparkles className="w-3 h-3" />
                   </>
                 )}
               </Button>
@@ -239,10 +240,11 @@ const Register: React.FC = () => {
         </div>
       </div>
 
-      {/* Colonna destra: Spiegazioni */}
-      <div className="hidden lg:flex flex-1 bg-secondary/30 items-center justify-center p-8">
+      {/* Right: Explanations */}
+      <div className="hidden lg:flex flex-1 items-center justify-center p-8 relative z-10">
         <div className="max-w-md space-y-6 animate-slide-in">
-          <h2 className="text-xl font-bold text-foreground">
+          <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
+            <Lock className="w-5 h-5 text-accent" />
             Hashing delle Password
           </h2>
 
@@ -255,7 +257,7 @@ const Register: React.FC = () => {
           </ExplanationCard>
 
           <CodeBlock
-            title="Come funziona l'hashing"
+            title="hash.ts"
             code={`// Password originale
 "miaPassword123"
 
@@ -271,8 +273,7 @@ const Register: React.FC = () => {
           <ExplanationCard title="Salt: sicurezza extra" type="success">
             <p className="text-sm">
               Il "salt" è un valore random aggiunto prima dell'hashing.
-              Così due utenti con la stessa password avranno hash diversi,
-              rendendo inutili gli attacchi con "rainbow tables".
+              Così due utenti con la stessa password avranno hash diversi.
             </p>
           </ExplanationCard>
         </div>
