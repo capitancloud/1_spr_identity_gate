@@ -50,7 +50,7 @@ const Login: React.FC = () => {
     if (result.success) {
       if (isAutoMode) {
         setCurrentStep(4);
-        await new Promise(r => setTimeout(r, 400));
+        await new Promise(r => setTimeout(r, 5000));
       }
       navigate(from, { replace: true });
     } else {
