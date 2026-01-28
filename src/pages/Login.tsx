@@ -36,12 +36,13 @@ const Login: React.FC = () => {
     setIsLoading(true);
 
     if (isAutoMode) {
-      // Modalità automatica: avanza gli step automaticamente
+      // Modalità automatica: avanza gli step automaticamente (3 secondi per step)
       setCurrentStep(1);
-      await new Promise(r => setTimeout(r, 600));
+      await new Promise(r => setTimeout(r, 3000));
       setCurrentStep(2);
-      await new Promise(r => setTimeout(r, 600));
+      await new Promise(r => setTimeout(r, 3000));
       setCurrentStep(3);
+      await new Promise(r => setTimeout(r, 3000));
     }
 
     const result = await login(email, password);
