@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
-import { ExplanationCard, StepIndicator } from '@/components/CodeExplanation';
+import { ExplanationCard } from '@/components/CodeExplanation';
+import LoginFlowExplainer from '@/components/LoginFlowExplainer';
 import { LogIn, Mail, Lock, AlertCircle, Loader2, ArrowLeft, Shield, Sparkles } from 'lucide-react';
 
 const Login: React.FC = () => {
@@ -14,6 +15,7 @@ const Login: React.FC = () => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
+  const [isAutoMode, setIsAutoMode] = useState(true);
 
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -21,27 +23,34 @@ const Login: React.FC = () => {
 
   const from = (location.state as { from?: string })?.from || '/dashboard';
 
-  const loginSteps = [
-    'Inserimento credenziali',
-    'Verifica password con hash',
-    'Generazione token sessione',
-    'Redirect alla dashboard',
-  ];
+  // Auto-advance in manual mode quando il form viene compilato
+  useEffect(() => {
+    if (!isAutoMode && email && password && currentStep === 0) {
+      setCurrentStep(1);
+    }
+  }, [email, password, isAutoMode, currentStep]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setIsLoading(true);
-    setCurrentStep(1);
 
-    await new Promise(r => setTimeout(r, 400));
-    setCurrentStep(2);
+    if (isAutoMode) {
+      // Modalità automatica: avanza gli step automaticamente
+      setCurrentStep(1);
+      await new Promise(r => setTimeout(r, 600));
+      setCurrentStep(2);
+      await new Promise(r => setTimeout(r, 600));
+      setCurrentStep(3);
+    }
 
     const result = await login(email, password);
 
     if (result.success) {
-      setCurrentStep(3);
-      await new Promise(r => setTimeout(r, 300));
+      if (isAutoMode) {
+        setCurrentStep(4);
+        await new Promise(r => setTimeout(r, 400));
+      }
       navigate(from, { replace: true });
     } else {
       setError(result.error || 'Errore durante il login');
@@ -49,6 +58,17 @@ const Login: React.FC = () => {
     }
 
     setIsLoading(false);
+  };
+
+  const handleManualStepChange = (step: number) => {
+    if (!isAutoMode) {
+      setCurrentStep(step);
+    }
+  };
+
+  const toggleAutoMode = () => {
+    setIsAutoMode(!isAutoMode);
+    setCurrentStep(0);
   };
 
   return (
@@ -155,24 +175,15 @@ const Login: React.FC = () => {
         </div>
       </div>
 
-      {/* Right: Explanations */}
+      {/* Right: Interactive Flow Explainer */}
       <div className="hidden lg:flex flex-1 items-center justify-center p-8 relative z-10">
-        <div className="max-w-md space-y-6 animate-slide-in">
-          <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-primary" />
-            Flusso di Login
-          </h2>
-          
-          <StepIndicator steps={loginSteps} currentStep={currentStep} />
-
-          <ExplanationCard title="Cosa succede durante il login?" type="info">
-            <ol className="list-decimal list-inside space-y-2 text-sm">
-              <li>Le credenziali vengono inviate al server</li>
-              <li>La password viene confrontata con l'hash salvato</li>
-              <li>Se corretta, viene generato un token di sessione</li>
-              <li>Il token viene salvato nel browser</li>
-            </ol>
-          </ExplanationCard>
+        <div className="max-w-md w-full space-y-6 animate-slide-in">
+          <LoginFlowExplainer
+            currentStep={currentStep}
+            onStepChange={handleManualStepChange}
+            isAutoMode={isAutoMode}
+            onAutoModeToggle={toggleAutoMode}
+          />
 
           <ExplanationCard title="Sicurezza" type="warning">
             <p className="text-sm">
