@@ -4,8 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
-import { ExplanationCard } from '@/components/CodeExplanation';
-import { KeyRound, Lock, AlertCircle, Loader2, Shield, Hash, Eye, EyeOff } from 'lucide-react';
+import { KeyRound, Lock, AlertCircle, Loader2, Shield, Eye, EyeOff } from 'lucide-react';
 
 /**
  * =====================================
@@ -123,34 +122,6 @@ const AccessCode: React.FC = () => {
               </Button>
             </form>
           </Card>
-
-          {/* Spiegazione didattica */}
-          <div className="space-y-4">
-            <ExplanationCard title="Come funziona?" type="info">
-              <div className="space-y-3 text-sm">
-                <p>
-                  <strong>🔑 Il codice di accesso</strong> è come la chiave di casa tua. 
-                  Solo chi conosce il codice può entrare nell'applicazione.
-                </p>
-                <p>
-                  <strong>🔐 L'hash</strong> è una tecnica di sicurezza: invece di salvare 
-                  il codice in chiaro (che sarebbe rischioso), lo trasformiamo in una 
-                  "impronta digitale" unica.
-                </p>
-              </div>
-            </ExplanationCard>
-
-            <ExplanationCard title="Perché usare l'hash?" type="warning">
-              <div className="flex items-start gap-3 text-sm">
-                <Hash className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                <p>
-                  Se qualcuno vedesse il codice sorgente dell'app, non potrebbe 
-                  scoprire il codice segreto! Vedrebbe solo l'hash, che è 
-                  impossibile da invertire.
-                </p>
-              </div>
-            </ExplanationCard>
-          </div>
         </div>
       </div>
     </div>
