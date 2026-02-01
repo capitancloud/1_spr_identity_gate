@@ -1,16 +1,29 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { useAccessCode } from '@/contexts/AccessCodeContext';
 import { Button } from '@/components/ui/button';
-import { Shield, LogOut, LogIn, UserPlus, Home, LayoutDashboard, Sparkles } from 'lucide-react';
+import { Shield, LogOut, LogIn, UserPlus, Home, LayoutDashboard, Sparkles, KeyRound } from 'lucide-react';
 
 const Header: React.FC = () => {
   const { isAuthenticated, user, logout } = useAuth();
+  const { lock } = useAccessCode();
   const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
     navigate('/');
+  };
+
+  /**
+   * BLOCCA APP
+   * 
+   * Questo pulsante "blocca" l'app, riportando l'utente
+   * alla schermata di inserimento del codice di accesso.
+   * È diverso dal logout utente!
+   */
+  const handleLockApp = () => {
+    lock();
   };
 
   return (
@@ -75,6 +88,20 @@ const Header: React.FC = () => {
               </Link>
             </>
           )}
+
+          {/* Pulsante per bloccare l'app (tornare al codice) */}
+          <div className="ml-2 pl-2 border-l border-border/50">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleLockApp}
+              className="gap-2 hover:bg-warning/10 hover:text-warning transition-all"
+              title="Blocca l'app e torna alla schermata del codice"
+            >
+              <KeyRound className="w-4 h-4" />
+              <span className="hidden sm:inline">Blocca</span>
+            </Button>
+          </div>
         </nav>
       </div>
     </header>
