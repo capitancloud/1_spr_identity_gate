@@ -4,7 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
-import { KeyRound, Lock, AlertCircle, Loader2, Shield, Eye, EyeOff } from 'lucide-react';
+import { Lock, AlertCircle, Loader2, Shield, Eye, EyeOff } from 'lucide-react';
+import superProgrammatoreLogo from '@/assets/super-programmatore-logo.png';
 
 /**
  * =====================================
@@ -54,17 +55,21 @@ const AccessCode: React.FC = () => {
       {/* Contenuto principale */}
       <div className="flex-1 flex items-center justify-center p-8 relative z-10">
         <div className="w-full max-w-md space-y-6 animate-fade-in">
+          {/* Logo */}
+          <div className="flex justify-center">
+            <img 
+              src={superProgrammatoreLogo} 
+              alt="Super Programmatore Logo" 
+              className="w-64 h-auto max-w-full"
+            />
+          </div>
+
           {/* Header */}
-          <div className="text-center space-y-4">
-            <div className="inline-flex p-4 rounded-2xl bg-gradient-primary mx-auto">
-              <KeyRound className="w-12 h-12 text-primary-foreground" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold text-foreground">IdentityGate</h1>
-              <p className="text-muted-foreground mt-2">
-                Inserisci il codice di accesso per entrare
-              </p>
-            </div>
+          <div className="text-center space-y-2">
+            <h1 className="text-3xl font-bold text-foreground">IdentityGate</h1>
+            <p className="text-muted-foreground">
+              Inserisci il codice di accesso per entrare
+            </p>
           </div>
 
           {/* Form */}
